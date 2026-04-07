@@ -22,6 +22,7 @@ const primaryLinks = [
   .map((item) => ({ ...item, href: resolveHref(item.href) }));
 
 const sortedPublications = publications.slice().sort((left, right) => right.year - left.year);
+const displayEmail = profile.email.replace("@", " [at] ");
 const currentYear = new Date().getFullYear();
 ---
 
@@ -78,7 +79,7 @@ const currentYear = new Date().getFullYear();
             </div>
             <div>
               <dt>Email</dt>
-              <dd><a href={`mailto:${profile.email}`}>{profile.email}</a></dd>
+              <dd><a href={`mailto:${profile.email}`}>{displayEmail}</a></dd>
             </div>
           </dl>
         </aside>
@@ -184,7 +185,7 @@ const currentYear = new Date().getFullYear();
 
         <div class="contact-card">
           <p class="contact-item-label">Email</p>
-          <a class="contact-item-value" href={`mailto:${profile.email}`}>{profile.email}</a>
+          <a class="contact-item-value" href={`mailto:${profile.email}`}>{displayEmail}</a>
 
           <p class="contact-item-label">Institution</p>
           <p class="contact-item-value">{profile.affiliation}</p>
