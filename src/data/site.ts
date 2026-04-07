@@ -12,6 +12,11 @@ export type Profile = {
   advisor?: string;
 };
 
+export type NewsItem = {
+  date: string;
+  text: string;
+};
+
 export type Links = {
   cv?: string;
   scholar?: string;
@@ -51,6 +56,17 @@ export const profile: Profile = {
   advisor: "Prof. Ke Xu",
   avatar: "avatar.jpg"
 };
+
+export const news: NewsItem[] = [
+  {
+    date: "04/2026",
+    text: "Submitted my first-author paper on visual token compression for multimodal LLMs to ACM MM 2026."
+  },
+  {
+    date: "02/2026",
+    text: "Completed a short-term study visit at the National University of Singapore (NUS)."
+  }
+];
 
 export const links: Links = {
   cv: "Nihao_Niu_CV.pdf",

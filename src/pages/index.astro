@@ -1,6 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { links, profile, publications } from "../data/site";
+import { links, news, profile, publications } from "../data/site";
 
 const resolveHref = (href: string) => {
   if (href.startsWith("http") || href.startsWith("mailto:") || href.startsWith("#")) {
@@ -31,6 +31,7 @@ const currentYear = new Date().getFullYear();
       <a class="site-title" href="#home">Nihao Niu</a>
       <nav class="site-nav" aria-label="Primary">
         <a href="#about">About</a>
+        <a href="#news">News</a>
         <a href="#publications">Publications</a>
         <a href="#contact">Contact</a>
       </nav>
@@ -115,6 +116,25 @@ const currentYear = new Date().getFullYear();
               )}
             </dl>
           </section>
+        </div>
+      </section>
+
+      <section id="news" class="panel news-section">
+        <div class="section-heading-row news-heading-row">
+          <div>
+            <p class="section-label">News</p>
+            <h2>Updates</h2>
+          </div>
+          <p class="section-note">Recent milestones and academic updates.</p>
+        </div>
+
+        <div class="news-list">
+          {news.map((item) => (
+            <article class="news-item">
+              <p class="news-date">{item.date}</p>
+              <p class="news-text">{item.text}</p>
+            </article>
+          ))}
         </div>
       </section>
 
