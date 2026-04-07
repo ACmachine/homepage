@@ -53,7 +53,8 @@ export const profile: Profile = {
 };
 
 export const links: Links = {
-  cv: "Nihao_Niu_CV.pdf"
+  cv: "Nihao_Niu_CV.pdf",
+  github: "https://github.com/ACmachine"
 };
 
 export const publications: Publication[] = [
