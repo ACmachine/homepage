@@ -357,13 +357,18 @@ h3 {
 }
 
 .publication-year {
-  width: fit-content;
-  padding: 0.45rem 0.72rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 78px;
+  height: 42px;
+  padding: 0 0.9rem;
   border-radius: 999px;
   background: var(--accent-soft);
   color: var(--accent);
   font-size: 0.92rem;
   font-weight: 700;
+  white-space: nowrap;
 }
 
 .publication-authors,
