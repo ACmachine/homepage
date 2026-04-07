@@ -1,0 +1,192 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { links, profile, publications } from "../data/site";
+
+const resolveHref = (href: string) => {
+  if (href.startsWith("http") || href.startsWith("mailto:") || href.startsWith("#")) {
+    return href;
+  }
+
+  return `${import.meta.env.BASE_URL}${href.replace(/^\/+/, "")}`;
+};
+
+const primaryLinks = [
+  { label: "CV", href: links.cv },
+  { label: "Email", href: `mailto:${profile.email}` },
+  { label: "Google Scholar", href: links.scholar },
+  { label: "GitHub", href: links.github },
+  { label: "ORCID", href: links.orcid },
+  { label: "LinkedIn", href: links.linkedin }
+]
+  .filter((item): item is { label: string; href: string } => Boolean(item.href))
+  .map((item) => ({ ...item, href: resolveHref(item.href) }));
+
+const sortedPublications = publications.slice().sort((left, right) => right.year - left.year);
+const currentYear = new Date().getFullYear();
+---
+
+<BaseLayout>
+  <div class="page-shell">
+    <header class="site-header">
+      <a class="site-title" href="#home">Nihao Niu</a>
+      <nav class="site-nav" aria-label="Primary">
+        <a href="#about">About</a>
+        <a href="#publications">Publications</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </header>
+
+    <main id="home" class="page-main">
+      <section class="hero panel">
+        <div class="hero-main">
+          <p class="section-label">Academic Homepage</p>
+          <h1>{profile.name}</h1>
+          <p class="hero-role">{profile.title}</p>
+          <p class="hero-affiliation">{profile.affiliation}</p>
+          <p class="hero-summary">{profile.tagline}</p>
+
+          <div class="hero-actions">
+            {primaryLinks.map((item, index) => (
+              <a
+                class={`action-link ${index === 0 ? "action-link-primary" : ""}`}
+                href={item.href}
+                target={item.href.startsWith("http") ? "_blank" : undefined}
+                rel={item.href.startsWith("http") ? "noreferrer" : undefined}
+              >
+                {item.label}
+              </a>
+            ))}
+          </div>
+        </div>
+
+        <aside class="hero-aside">
+          <img class="profile-photo" src={resolveHref(profile.avatar ?? "avatar.jpg")} alt={`${profile.name} portrait`} />
+
+          <dl class="profile-facts">
+            <div>
+              <dt>Position</dt>
+              <dd>{profile.title}</dd>
+            </div>
+            <div>
+              <dt>Affiliation</dt>
+              <dd>{profile.affiliation}</dd>
+            </div>
+            <div>
+              <dt>Location</dt>
+              <dd>{profile.location}</dd>
+            </div>
+            <div>
+              <dt>Email</dt>
+              <dd><a href={`mailto:${profile.email}`}>{profile.email}</a></dd>
+            </div>
+          </dl>
+        </aside>
+      </section>
+
+      <section id="about" class="panel section-grid">
+        <div>
+          <p class="section-label">About</p>
+          <h2>Research Overview</h2>
+          <p class="body-copy">{profile.bio}</p>
+        </div>
+
+        <div class="info-stack">
+          <section class="info-card">
+            <h3>Research Interests</h3>
+            <ul class="tag-list">
+              {profile.interests.map((interest) => (
+                <li>{interest}</li>
+              ))}
+            </ul>
+          </section>
+
+          <section class="info-card compact-card">
+            <h3>Academic Information</h3>
+            <dl class="detail-list">
+              <div>
+                <dt>Education</dt>
+                <dd>{profile.education}</dd>
+              </div>
+              {profile.advisor && (
+                <div>
+                  <dt>Advisor</dt>
+                  <dd>{profile.advisor}</dd>
+                </div>
+              )}
+            </dl>
+          </section>
+        </div>
+      </section>
+
+      <section id="publications" class="panel">
+        <div class="section-heading-row">
+          <div>
+            <p class="section-label">Publications</p>
+            <h2>Selected Work</h2>
+          </div>
+          <p class="section-note">Research papers and ongoing work in multimodal machine learning.</p>
+        </div>
+
+        <div class="publication-list">
+          {sortedPublications.map((publication) => (
+            <article class={`publication-item ${publication.highlight ? "publication-item-featured" : ""}`}>
+              <div class="publication-year">{publication.year}</div>
+              <div class="publication-content">
+                <h3>{publication.title}</h3>
+                <p class="publication-authors">
+                  {publication.authors.map((author) => (
+                    <span class={author === profile.name ? "author-self" : undefined}>{author}</span>
+                  ))}
+                </p>
+                <p class="publication-venue">{publication.venue}</p>
+                {publication.description && <p class="publication-description">{publication.description}</p>}
+                {publication.note && <p class="publication-note">{publication.note}</p>}
+
+                {(publication.pdf || publication.code || publication.project) && (
+                  <div class="publication-links">
+                    {publication.pdf && <a href={resolveHref(publication.pdf)} target="_blank" rel="noreferrer">PDF</a>}
+                    {publication.code && <a href={resolveHref(publication.code)} target="_blank" rel="noreferrer">Code</a>}
+                    {publication.project && <a href={resolveHref(publication.project)} target="_blank" rel="noreferrer">Project</a>}
+                  </div>
+                )}
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section id="contact" class="panel contact-section">
+        <div>
+          <p class="section-label">Contact</p>
+          <h2>Contact</h2>
+          <p class="body-copy contact-copy">For research discussions, collaboration opportunities, or academic correspondence, please feel free to reach out by email.</p>
+        </div>
+
+        <div class="contact-card">
+          <p class="contact-item-label">Email</p>
+          <a class="contact-item-value" href={`mailto:${profile.email}`}>{profile.email}</a>
+
+          <p class="contact-item-label">Institution</p>
+          <p class="contact-item-value">{profile.affiliation}</p>
+
+          <p class="contact-item-label">Resources</p>
+          <div class="resource-links">
+            {primaryLinks.map((item) => (
+              <a
+                href={item.href}
+                target={item.href.startsWith("http") ? "_blank" : undefined}
+                rel={item.href.startsWith("http") ? "noreferrer" : undefined}
+              >
+                {item.label}
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>(c) {currentYear} Nihao Niu. Academic homepage built with Astro.</p>
+    </footer>
+  </div>
+</BaseLayout>
